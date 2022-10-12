@@ -133,12 +133,17 @@ var vocabularyEnglish = [
     "Gợi ý: Festival ",
     "https://www.tienganh123.com/file/phothong/lop8-moi/unit3/lesson2/vocab/audio/6.mp3",
   ],
-  ["Shawl", "n) Khăn phiêu", "Gợi ý: Shawl", ""],
+  [
+    "Shawl",
+    "n) Khăn phiêu",
+    "Gợi ý: Shawl",
+    "https://www.tienganh123.com/file/phothong/lop8-moi/unit3/lesson2/vocab/audio/7.mp3",
+  ],
   [
     "Waterwheel",
     "n) cối xay nước, cọn nước",
     "Gợi ý: Waterwheel",
-    "https://www.tienganh123.com/file/phothong/lop8-moi/unit3/lesson2/vocab/audio/7.mp3",
+    "https://www.tienganh123.com/file/phothong/lop8-moi/unit3/lesson2/vocab/audio/8.mp3",
   ],
   [
     "Terraced field",
@@ -211,6 +216,12 @@ var vocabularyEnglish = [
     "Question word",
     "(How, When, Where, Why, What, Who, Whose, Which) gọi là gì?",
     "Gợi ý: Học lại đi",
+    "3",
+  ],
+  [
+    "How, When, Where, Why, What, Who, Whose, Which",
+    "Nêu những Question word cơ bản",
+    "How, When, Where, Why, What, Who, Whose, Which",
     "3",
   ],
   [
@@ -466,7 +477,6 @@ function getRandomQuestion() {
     if (itemMp3 === undefined) {
       var noAudioItem = audioLists[6];
       itemMp3 = `./assets/audio/${noAudioItem}.mp3`;
-      audioItemElement.loop;
       audioItemElement.src = `${itemMp3}`;
     }
     // Xử lý hiển thị gợi ý:
@@ -683,7 +693,10 @@ answerElement.addEventListener("focus", function handleClearError(e) {
   if (card.matches(".is-flipped")) {
     card.classList.remove("is-flipped");
   }
+
   suggestions.textContent = "Xem gợi ý";
+  answerElement.style.height = "40px";
+  audioItemElement.pause();
   e.target.value = "";
 });
 
@@ -704,6 +717,7 @@ answerElement.oninput = function () {
   answerElement.classList.remove("invalid");
   submitResult.classList.remove("correctResult");
   submitResult.classList.remove("correctResults");
+  auto_grow(answerElement);
 
   // Xử lý báo lỗi khi nhập trường đầu vào bị sai:
   let intInputValue = correctAnswer;
@@ -716,6 +730,11 @@ answerElement.oninput = function () {
     answerElement.classList.add("addInvalid");
   }
 };
+
+function auto_grow(answerElement) {
+  answerElement.style.height = "5px";
+  answerElement.style.height = answerElement.scrollHeight + "px";
+}
 
 //  Các hàm xử lý Audio:
 var audioLists = [
@@ -742,12 +761,19 @@ function playBackgroundMusic() {
   backgroundMusic = appElement.querySelector("#backgroundMusic");
   isPlayIng = true;
   backgroundMusic.play();
+  backgroundMusic.addEventListener(
+    "ended",
+    function () {
+      this.currentTime = 0;
+      this.play();
+    },
+    false
+  );
 }
 function pauseBackgroundMusic() {
   isPlayIng = false;
   backgroundMusic.pause();
 }
-
 function Dong_ho() {
   var gio = document.getElementById("gio");
   var gios = document.getElementById("gios");
