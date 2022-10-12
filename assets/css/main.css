@@ -239,8 +239,13 @@ textarea#answer,
   font-family: "Open Sans", sans-serif;
   letter-spacing: normal;
   height: 40px;
-  resize: vertical;
   width: 300px;
+}
+
+textarea#answer {
+  resize: none;
+  overflow: hidden;
+  text-align: justify;
 }
 
 .App-group .invalid {
