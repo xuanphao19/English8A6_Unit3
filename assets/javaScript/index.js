@@ -1,9 +1,11 @@
 var appElement = document.querySelector("#App-1");
 var card = appElement.querySelector(".flip-card-inner");
+var flipCardFrontEle = appElement.querySelector("#flip-card");
+var flipCardElement = appElement.querySelector(".flipCard");
+var canvasBlock = appElement.querySelector(".canvasBlock");
 var formMessage = appElement.querySelector(".App-message");
 var answerElement = appElement.querySelector("#answer");
 var lengthArr = appElement.querySelector(".lengthArr");
-var flipCardFrontEle = appElement.querySelector("#flip-card-front");
 var cardNext = appElement.querySelector("#next");
 var coating = appElement.querySelector(".coating");
 var timeSum = appElement.querySelector(".timeSum");
@@ -1200,9 +1202,18 @@ function getRandomQuestion() {
 
   for (var items of randomTerm) {
     // Xử lý nếu có ảnh thì hiển thị ra giao diện khi hàm được gọi.
+    var itemImg;
     if (items.includes("png") || items.includes("jpg")) {
-      var itemImg = items;
+      canvasBlock.classList.add("canvasNone");
+      flipCardElement.classList.add("flipCardBlock");
+      itemImg = items;
       flipCardFrontEle.src = `./assets/img/${itemImg}`;
+      console.log(`có ảnh các bác ơi!!!!!!!!!: `);
+    }
+    if (itemImg === undefined) {
+      canvasBlock.classList.remove("canvasNone");
+      flipCardElement.classList.remove("flipCardBlock");
+      flipCardFrontEle.src = "";
     }
     // Xử lý nếu có audio thì Sửa src cho audioItemElement.
     var itemMp3;
@@ -1459,7 +1470,7 @@ answerElement.oninput = function () {
   answerElement.classList.remove("invalid");
   submitResult.classList.remove("correctResult");
   submitResult.classList.remove("correctResults");
-  auto_grow(answerElement);
+  autoGrow(answerElement);
 
   // Xử lý báo lỗi khi nhập trường đầu vào bị sai:
   let intInputValue = correctAnswer;
@@ -1473,8 +1484,8 @@ answerElement.oninput = function () {
   }
 };
 
-function auto_grow(answerElement) {
-  answerElement.style.height = "5px";
+// Mở rộng hộp nhập dữ liệu đầu vào answer:
+function autoGrow(answerElement) {
   answerElement.style.height = answerElement.scrollHeight + "px";
 }
 
@@ -1516,6 +1527,13 @@ function pauseBackgroundMusic() {
   isPlayIng = false;
   backgroundMusic.pause();
 }
+
+var seconds;
+var dates = new Date();
+var date = dates.getDate();
+var Gio_hien_tai = dates.getHours();
+var Phut_hien_tai = dates.getMinutes();
+var Giay_hien_tai = dates.getSeconds();
 function Dong_ho() {
   var gio = document.getElementById("gio");
   var gios = document.getElementById("gios");
@@ -1523,9 +1541,6 @@ function Dong_ho() {
   var phuts = document.getElementById("phuts");
   var giay = document.getElementById("giay");
   var giays = document.getElementById("giays");
-  var Gio_hien_tai = new Date().getHours();
-  var Phut_hien_tai = new Date().getMinutes();
-  var Giay_hien_tai = new Date().getSeconds();
 
   gio.innerHTML = Gio_hien_tai;
   gios.innerHTML = Gio_hien_tai;
@@ -1543,27 +1558,25 @@ function Dong_ho() {
     giay.innerHTML = ` : ${Giay_hien_tai}`;
     giays.innerHTML = ` : ${Giay_hien_tai}`;
   }
+  var current_date;
+  if (date < 10) {
+    current_date = `Ngày 0${dates.getDate()} / ${
+      dates.getMonth() + 1
+    } / ${dates.getFullYear()}`;
+  } else {
+    current_date = `${dates.getDate()} / ${
+      dates.getMonth() + 1
+    } / ${dates.getFullYear()}`;
+  }
+  document.querySelector(".shows_date").innerHTML = current_date;
+  document.querySelector(".shows_dates").innerHTML = current_date;
 }
 var Dem_gio = setInterval(Dong_ho, 1000);
 function myStopFunction() {
   clearInterval(Dem_gio);
 }
 
-var dates = new Date();
-var date = dates.getDate();
-var current_date;
-if (date < 10) {
-  current_date = `Ngày 0${dates.getDate()} / ${
-    dates.getMonth() + 1
-  } / ${dates.getFullYear()}`;
-} else {
-  current_date = `${dates.getDate()} / ${
-    dates.getMonth() + 1
-  } / ${dates.getFullYear()}`;
-}
-document.querySelector(".shows_date").innerHTML = current_date;
-document.querySelector(".shows_dates").innerHTML = current_date;
-var seconds;
+// Đồng hồ bấm giờ:
 function Stopwatch(elem) {
   var time = 0;
   var offset;
@@ -1581,9 +1594,9 @@ function Stopwatch(elem) {
     offset = now;
     return timePassed;
   }
+
   function timeFormatter(time) {
     time = new Date(time);
-
     var minutes = time.getMinutes().toString();
     seconds = time.getSeconds().toString();
     var milliseconds = time.getMilliseconds().toString();
@@ -1680,3 +1693,92 @@ btnPause.addEventListener("click", function () {
 //    <source src="./assets/audio/Tiengkimgiay.mp3" type="audio/mpeg" />
 //    Your browser does not support the audio element.
 //  </audio>;
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var radius = canvas.height / 2;
+ctx.translate(radius, radius);
+radius = radius * 0.95;
+setInterval(drawClock, 1000);
+
+function drawClock() {
+  drawFace(ctx, radius);
+  drawNumbers(ctx, radius);
+  drawTime(ctx, radius);
+  // console.log(`11111111111`, second);
+}
+
+function drawFace(ctx, radius) {
+  var grad;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+  // ctx.fillStyle = "violet";
+  ctx.fill();
+  var img = document.getElementById("scream");
+  ctx.drawImage(img, -132, -132, 265, 285);
+  grad = ctx.createRadialGradient(0, 0, radius * 0.85, 0, 0, radius * 1.18);
+  // grad.addColorStop(0, "green");
+  // grad.addColorStop(0.4, "#fccdff");
+  // grad.addColorStop(1, "blue");
+  grad.addColorStop(0, "#333");
+  grad.addColorStop(0.4, "white");
+  grad.addColorStop(1, "#333");
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = radius * 0.14;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0, 0, radius * 0.075, 0, 2 * Math.PI);
+  ctx.fillStyle = "blue";
+  ctx.strokeStyle = "#0000ffb3";
+  ctx.fill();
+}
+
+function drawNumbers(ctx, radius) {
+  var ang;
+  var num;
+  var gradient;
+  ctx.font = radius * 0.16 + "px Verdana";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "rgb(239 0 255)";
+  for (num = 1; num < 13; num++) {
+    ang = (num * Math.PI) / 6;
+    ctx.rotate(ang);
+    ctx.translate(0, -radius * 0.8);
+    ctx.rotate(-ang);
+    ctx.fillText(num.toString(), 0, 0);
+    ctx.rotate(ang);
+    ctx.translate(0, radius * 0.8);
+    ctx.rotate(-ang);
+  }
+}
+
+function drawTime(ctx, radius) {
+  var now = new Date();
+  var hour = now.getHours();
+  var minute = now.getMinutes();
+  var second = now.getSeconds();
+  //hour
+  hour = hour % 12;
+  hour =
+    (hour * Math.PI) / 6 +
+    (minute * Math.PI) / (6 * 60) +
+    (second * Math.PI) / (360 * 60);
+  drawHand(ctx, hour, radius * 0.46, radius * 0.08);
+  //minute
+  minute = (minute * Math.PI) / 30 + (second * Math.PI) / (30 * 60);
+  drawHand(ctx, minute, radius * 0.7, radius * 0.065);
+  // second
+  second = (second * Math.PI) / 30;
+  drawHand(ctx, second, radius * 0.82, radius * 0.02);
+}
+
+function drawHand(ctx, pos, length, width) {
+  ctx.beginPath();
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  ctx.moveTo(0, 0);
+  ctx.rotate(pos);
+  ctx.lineTo(0, -length);
+  ctx.stroke();
+  ctx.rotate(-pos);
+}
