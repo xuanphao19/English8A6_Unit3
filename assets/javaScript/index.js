@@ -1528,12 +1528,6 @@ function pauseBackgroundMusic() {
   backgroundMusic.pause();
 }
 
-var seconds;
-var dates = new Date();
-var date = dates.getDate();
-var Gio_hien_tai = dates.getHours();
-var Phut_hien_tai = dates.getMinutes();
-var Giay_hien_tai = dates.getSeconds();
 function Dong_ho() {
   var gio = document.getElementById("gio");
   var gios = document.getElementById("gios");
@@ -1541,6 +1535,9 @@ function Dong_ho() {
   var phuts = document.getElementById("phuts");
   var giay = document.getElementById("giay");
   var giays = document.getElementById("giays");
+  var Gio_hien_tai = new Date().getHours();
+  var Phut_hien_tai = new Date().getMinutes();
+  var Giay_hien_tai = new Date().getSeconds();
 
   gio.innerHTML = Gio_hien_tai;
   gios.innerHTML = Gio_hien_tai;
@@ -1558,25 +1555,27 @@ function Dong_ho() {
     giay.innerHTML = ` : ${Giay_hien_tai}`;
     giays.innerHTML = ` : ${Giay_hien_tai}`;
   }
-  var current_date;
-  if (date < 10) {
-    current_date = `Ngày 0${dates.getDate()} / ${
-      dates.getMonth() + 1
-    } / ${dates.getFullYear()}`;
-  } else {
-    current_date = `${dates.getDate()} / ${
-      dates.getMonth() + 1
-    } / ${dates.getFullYear()}`;
-  }
-  document.querySelector(".shows_date").innerHTML = current_date;
-  document.querySelector(".shows_dates").innerHTML = current_date;
 }
 var Dem_gio = setInterval(Dong_ho, 1000);
 function myStopFunction() {
   clearInterval(Dem_gio);
 }
 
-// Đồng hồ bấm giờ:
+var dates = new Date();
+var date = dates.getDate();
+var current_date;
+if (date < 10) {
+  current_date = `Ngày 0${dates.getDate()} / ${
+    dates.getMonth() + 1
+  } / ${dates.getFullYear()}`;
+} else {
+  current_date = `${dates.getDate()} / ${
+    dates.getMonth() + 1
+  } / ${dates.getFullYear()}`;
+}
+document.querySelector(".shows_date").innerHTML = current_date;
+document.querySelector(".shows_dates").innerHTML = current_date;
+var seconds;
 function Stopwatch(elem) {
   var time = 0;
   var offset;
@@ -1594,9 +1593,9 @@ function Stopwatch(elem) {
     offset = now;
     return timePassed;
   }
-
   function timeFormatter(time) {
     time = new Date(time);
+
     var minutes = time.getMinutes().toString();
     seconds = time.getSeconds().toString();
     var milliseconds = time.getMilliseconds().toString();
